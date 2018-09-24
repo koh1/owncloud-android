@@ -29,6 +29,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Environment;
 
 import com.owncloud.android.authentication.FingerprintManager;
@@ -45,6 +46,9 @@ import com.owncloud.android.ui.activity.FingerprintActivity;
 import com.owncloud.android.ui.activity.PassCodeActivity;
 import com.owncloud.android.ui.activity.PatternLockActivity;
 import com.owncloud.android.ui.activity.WhatsNewActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -154,11 +158,15 @@ public class MainApp extends Application {
             @Override
             public void onActivityResumed(Activity activity) {
                 Log_OC.d(activity.getClass().getSimpleName(), "onResume() starting" );
+                SimpleDateFormat date = new SimpleDateFormat("yyyyMMddhhmmss");
+                String logDate = date.format(new Date());
+                Debug.startMethodTracing("trace-" + logDate);
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
                 Log_OC.d(activity.getClass().getSimpleName(), "onPause() ending");
+                Debug.stopMethodTracing();
             }
 
             @Override
@@ -174,6 +182,7 @@ public class MainApp extends Application {
                         activity instanceof FingerprintActivity) {
                     WhatsNewActivity.runIfNeeded(activity);
                 }
+                Debug.stopMethodTracing();
             }
 
             @Override
@@ -184,6 +193,7 @@ public class MainApp extends Application {
             @Override
             public void onActivityDestroyed(Activity activity) {
                 Log_OC.d(activity.getClass().getSimpleName(), "onDestroy() ending" );
+                Debug.stopMethodTracing();
             }
         });
     }
