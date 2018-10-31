@@ -44,7 +44,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.UploadsStorageManager;
-import com.owncloud.android.db.OCUpload;
+import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
@@ -264,7 +264,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
             // Do not call super in this case; more refactoring needed around onRemoteOeprationFinish :'(
             getFileOperationsHelper().setOpIdWaitingFor(Long.MAX_VALUE);
             dismissLoadingDialog();
-            Account account = (Account) result.getData().get(0);
+            Account account = ((RemoteOperationResult<Account>) result).getData();
             if (!result.isSuccess()) {
 
                 requestCredentialsUpdate();

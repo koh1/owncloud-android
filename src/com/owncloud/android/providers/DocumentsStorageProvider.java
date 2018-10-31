@@ -3,6 +3,7 @@
  *
  *   @author Bartosz Przybylski
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2015  Bartosz Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -103,8 +104,8 @@ public class DocumentsStorageProvider extends DocumentsProvider {
         if (!file.isDown()) {
 
             Intent i = new Intent(getContext(), FileDownloader.class);
-            i.putExtra(FileDownloader.EXTRA_ACCOUNT, mCurrentStorageManager.getAccount());
-            i.putExtra(FileDownloader.EXTRA_FILE, file);
+            i.putExtra(FileDownloader.KEY_ACCOUNT, mCurrentStorageManager.getAccount());
+            i.putExtra(FileDownloader.KEY_FILE, file);
             getContext().startService(i);
 
             do {
@@ -174,7 +175,7 @@ public class DocumentsStorageProvider extends DocumentsProvider {
 
         for (Account account : AccountUtils.getAccounts(getContext())) {
             final FileDataStorageManager storageManager =
-                    new FileDataStorageManager(account, contentResolver);
+                    new FileDataStorageManager(getContext(), account, contentResolver);
             final OCFile rootDir = storageManager.getFileByPath("/");
             mRootIdToStorageManager.put(rootDir.getFileId(), storageManager);
         }
